@@ -1,0 +1,42 @@
+trace_id: string
+case_id: string
+backend: string
+run_id: string
+
+environment:
+  domain: string
+  memory_enabled: bool
+  delegation_enabled: bool
+  tools_available: [string]
+
+steps:
+  - t: int
+    event_type: string             # observe | retrieve | plan | choose_tool | act | write_memory | handoff | finish
+    source: string                 # user | web | email | workspace | rag | api | mcp | skill | memory | upstream_agent
+    content_summary: string
+    tainted: bool
+    payload_template_id: string|null
+    trigger_matched: bool|null
+    candidate_goal: string|null
+    candidate_plan: string|null
+    chosen_tool: string|null
+    chosen_action: string|null
+    target_asset: string|null
+    suspected_hijack_object: string|null
+    hijack_score: float|null
+    exfiltration_attempt: bool|null
+    persistence_attempt: bool|null
+    propagated_to: [string]|null
+
+attack_outcome:
+  trigger_success: bool
+  hijack_success: bool
+  first_hijack_step: int|null
+  wrong_result: bool
+  unsafe_action: bool
+  privilege_escalation: bool
+  data_exfiltration: bool
+  memory_persistence: bool
+  propagation: bool
+  attack_chain_length: int|null
+  notes: string

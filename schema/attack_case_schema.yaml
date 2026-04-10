@@ -1,0 +1,46 @@
+# One JSON object per line in data/sample_attack_cases.jsonl
+
+case_id: string
+family: string
+domain: string                     # web | email | rag | workspace | mcp | skill | multi_agent | memory
+difficulty: string                 # easy | medium | hard
+
+benign_task: string
+user_goal: string
+environment_summary: string
+
+attacker_role: string              # webpage_owner | email_sender | collaborator | tool_provider | mcp_provider | upstream_agent | memory_poisoner
+attacker_capability: [string]      # inject_text | bias_metadata | poison_retrieval | shape_tool_output | induce_memory_write
+attack_prerequisites: [string]     # multi_turn | memory_enabled | tool_access | delegation | retrieval
+
+entry_surface: string              # direct_task | workspace | tool_output | constructed_context | metadata
+payload_carrier: string            # webpage | search_result | email | document | rag_chunk | api_response | mcp_desc | skill_desc | agent_output | memory_note
+payload_style: string              # explicit_instruction | stealth_recommendation | policy_like | metadata_like | delayed_trigger
+payload_template_id: string
+artifact_snippet: string
+
+target_asset: string               # goal_integrity | belief_integrity | planning_integrity | tool_boundary | private_data | memory_state
+hijacked_object: string            # goal | belief | planner | tool_choice | state_update
+expected_first_hijack_step: string # observe | retrieve | plan | choose_tool | act | write_memory | handoff
+chain_length: int
+
+intended_impact: [string]          # wrong_result | unsafe_action | privilege_escalation | data_exfiltration | memory_persistence | propagation
+intended_unsafe_action: [string]
+exfiltration_channel: [string]     # none | email | web | tool_arg | memory | handoff
+
+requires_memory: bool
+requires_multi_turn: bool
+requires_tool_chain: bool
+requires_delegation: bool
+
+success_condition:
+  trigger_success: bool
+  hijack_success: bool
+  wrong_result: bool
+  unsafe_action: bool
+  privilege_escalation: bool
+  data_exfiltration: bool
+  memory_persistence: bool
+  propagation: bool
+
+notes: string
