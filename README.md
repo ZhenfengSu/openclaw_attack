@@ -122,7 +122,8 @@ Trace analysis should measure:
 
 ## Current Status
 
-This repository is a design-complete scaffold.
+This repository now includes a minimal runnable harness for executing attack
+cases through the local OpenClaw CLI.
 
 It already includes:
 
@@ -131,10 +132,10 @@ It already includes:
 - an extensible case schema
 - an extensible trace schema
 - starter attack cases
+- a minimal local OpenClaw runner wired to `openclaw agent`
 
-It does not yet include:
+It still does not yet include:
 
-- a finished local OpenClaw runner
 - automatic environment builders
 - large-scale payload libraries
 
@@ -198,3 +199,136 @@ Why:
 2. Use `openclaw agent` as the default attack execution entry.
 3. Add `openclaw gateway call ... --expect-final` later when you need structured RPC automation or richer trace collection.
 4. Reserve `openclaw capability` for ablations that intentionally bypass the full agent stack.
+
+## Running Attack Cases
+
+The minimal runnable path is implemented in [src/attack_harness.py](/home/link/project/openclaw_security/openclaw_attack/src/attack_harness.py)
+and uses [src/openclaw_runner.py](/home/link/project/openclaw_security/openclaw_attack/src/openclaw_runner.py)
+to call `openclaw agent`.
+
+### 1. Preflight the local OpenClaw runtime
+
+```bash
+openclaw gateway status --require-rpc --json
+```
+
+If this fails, the harness will also fail during preflight unless you pass
+`--skip-preflight`.
+
+### 2. Run all sample attack cases
+
+```bash
+python3 src/attack_harness.py \
+  --case-path data/sample_attack_cases.jsonl \
+  --out-path results/attack_runs.json
+```
+
+This will:
+
+- load the JSONL attack cases
+- run a Gateway preflight check
+- build a research prompt for each case
+- execute the prompt through `openclaw agent --message ...`
+- write raw stdout and stderr into `results/attack_runs.json`
+
+### 3. Run a single case
+
+```bash
+python3 src/attack_harness.py \
+  --case-path data/sample_attack_cases.jsonl \
+  --case-id A001 \
+  --out-path results/a001.json
+```
+
+Repeat `--case-id` to run a subset:
+
+```bash
+python3 src/attack_harness.py \
+  --case-path data/sample_attack_cases.jsonl \
+  --case-id A001 \
+  --case-id A003 \
+  --out-path results/selected_cases.json
+```
+
+### 4. Pass through OpenClaw runtime options
+
+Use an OpenClaw profile:
+
+```bash
+python3 src/attack_harness.py \
+  --profile dev \
+  --case-id A001 \
+  --out-path results/dev_a001.json
+```
+
+Use the default local agent explicitly. This is now the harness default, so you
+usually do not need to pass it:
+
+```bash
+python3 src/attack_harness.py \
+  --agent-name main \
+  --case-id A001 \
+  --out-path results/a001_main_agent.json
+```
+
+Target a specific agent recipient:
+
+```bash
+python3 src/attack_harness.py \
+  --case-id A002 \
+  --agent-target "<target>" \
+  --out-path results/a002_targeted.json
+```
+
+Actually deliver the response:
+
+```bash
+python3 src/attack_harness.py \
+  --case-id A002 \
+  --agent-target "<target>" \
+  --deliver \
+  --out-path results/a002_deliver.json
+```
+
+Reuse an existing OpenClaw session directly:
+
+```bash
+python3 src/attack_harness.py \
+  --session-id a43bc949-25c2-4803-bce2-9764fb32a2ca \
+  --case-id A001 \
+  --out-path results/a001_existing_session.json
+```
+
+Skip preflight if you have already validated the runtime:
+
+```bash
+python3 src/attack_harness.py \
+  --case-id A001 \
+  --skip-preflight \
+  --out-path results/a001_skip_preflight.json
+```
+
+### 5. Inspect the output
+
+The result JSON includes:
+
+- selected harness configuration
+- OpenClaw runtime options
+- the preflight command result
+- the full prompt sent to `openclaw agent`
+- the exact CLI command used
+- raw stdout and stderr for each case
+
+This gives you a minimal but usable execution trace while the richer
+Gateway-based trace collector is still pending.
+
+## Session Selection Notes
+
+`openclaw agent` requires one of the following selectors:
+
+- `--to <recipient>`
+- `--session-id <id>`
+- `--agent <name>`
+
+The harness now defaults to `--agent main` so a local run does not fail just
+because no explicit recipient was provided.
