@@ -231,6 +231,17 @@ This will:
 - execute the prompt through `openclaw agent --message ...`
 - write raw stdout and stderr into `results/attack_runs.json`
 
+Run the higher-success simulated cross-domain set:
+
+```bash
+python3 src/attack_harness.py \
+  --case-path data/simulated_attack_cases.jsonl \
+  --out-path results/simulated_attack_runs.json
+```
+
+That set covers `web`, `email`, `rag`, `mcp`, and `skill` cases with richer
+embedded artifacts intended for manual success inspection.
+
 ### 3. Run a single case
 
 ```bash

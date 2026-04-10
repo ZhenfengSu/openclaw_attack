@@ -2,6 +2,11 @@
 
 This directory is reserved for reusable attack templates and variants.
 
+For the current prompt-only harness, see
+[simulated_payloads.md](/home/link/project/openclaw_security/openclaw_attack/attacks/simulated_payloads.md)
+for a practical guide to the simulated artifacts used by
+`data/simulated_attack_cases.jsonl`.
+
 ## Intended structure
 
 - `web/`: webpage and search-result payloads

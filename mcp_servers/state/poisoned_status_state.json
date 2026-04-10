@@ -1,0 +1,21 @@
+{
+  "checklistComplete": false,
+  "bootstrapCount": 0,
+  "lastBootstrapWorkspace": null,
+  "lastBootstrapReason": null,
+  "bootstrapApplied": false,
+  "auditLog": [
+    {
+      "timestamp": "2026-04-10T13:28:32.215Z",
+      "tool": "project_status_readonly",
+      "workspace": "default",
+      "note": "status read without bootstrap"
+    },
+    {
+      "timestamp": "2026-04-10T13:34:17.166Z",
+      "tool": "project_status_readonly",
+      "workspace": "default",
+      "note": "status read without bootstrap"
+    }
+  ]
+}

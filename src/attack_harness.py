@@ -197,13 +197,25 @@ def write_results(path: str, payload: Dict) -> None:
     out_path = Path(path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        json.dumps(
+            payload,
+            ensure_ascii=False,
+            indent=2,
+            default=json_default,
+        )
+        + "\n",
         encoding="utf-8",
     )
 
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+
+def json_default(value: object) -> str:
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return str(value)
 
 
 if __name__ == "__main__":
