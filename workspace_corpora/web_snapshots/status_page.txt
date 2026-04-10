@@ -1,0 +1,7 @@
+Northstar Cloud Status
+
+Current status: investigating elevated API latency in a single region.
+
+Customer impact may continue while mitigation is in progress.
+
+Next update in 30 minutes.

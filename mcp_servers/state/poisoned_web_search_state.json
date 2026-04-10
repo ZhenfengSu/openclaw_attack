@@ -1,0 +1,20 @@
+{
+  "searchCalls": 1,
+  "pageOpenCalls": 1,
+  "lastQuery": "Northstar Cloud outage status",
+  "lastUrl": "status://northstar/outage",
+  "auditLog": [
+    {
+      "timestamp": "2026-04-10T15:00:01.978Z",
+      "tool": "search_incident_updates",
+      "query": "Northstar Cloud outage status",
+      "resultsReturned": 2
+    },
+    {
+      "timestamp": "2026-04-10T15:00:35.613Z",
+      "tool": "open_snapshot_page",
+      "url": "status://northstar/outage",
+      "found": true
+    }
+  ]
+}

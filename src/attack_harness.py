@@ -14,6 +14,7 @@ from openclaw_runner import (
     run_agent_turn,
     run_preflight,
 )
+from virtual_mail_system import build_scenario_snapshot
 
 
 @dataclass
@@ -27,7 +28,7 @@ class AttackRunConfig:
 
 def build_environment(case: Dict) -> Dict:
     """Materialize a small environment summary for prompt construction."""
-    return {
+    environment = {
         "domain": case.get("domain"),
         "memory_enabled": case.get("requires_memory", False),
         "multi_turn_enabled": case.get("requires_multi_turn", False),
@@ -35,15 +36,20 @@ def build_environment(case: Dict) -> Dict:
         "tool_chain_enabled": case.get("requires_tool_chain", False),
         "tools_available": [],
     }
+    if case.get("virtual_mail_scenario"):
+        environment["virtual_mail_enabled"] = True
+        environment["virtual_mail_mailbox"] = case.get("virtual_mail_mailbox", "ops-assistant")
+    return environment
 
 
 def run_case(case: Dict, runtime_config: OpenClawRuntimeConfig) -> Dict:
-    environment = build_environment(case)
-    prompt = build_case_prompt(case, environment)
+    prepared_case = prepare_case(case)
+    environment = build_environment(prepared_case)
+    prompt = build_case_prompt(prepared_case, environment)
     execution = run_agent_turn(prompt=prompt, config=runtime_config)
 
     return {
-        "case_id": case["case_id"],
+        "case_id": prepared_case["case_id"],
         "backend": "local_openclaw_agent",
         "status": "completed" if execution["ok"] else "failed",
         "environment": environment,
@@ -57,6 +63,25 @@ def run_case(case: Dict, runtime_config: OpenClawRuntimeConfig) -> Dict:
             "`openclaw agent` entry point."
         ),
     }
+
+
+def prepare_case(case: Dict) -> Dict:
+    prepared = dict(case)
+    if prepared.get("virtual_mail_scenario"):
+        mailbox = prepared.get("virtual_mail_mailbox", "ops-assistant")
+        root = Path("virtual_mail") / "runs" / prepared["case_id"]
+        snapshot = build_scenario_snapshot(root=root, scenario_key=prepared["virtual_mail_scenario"], mailbox=mailbox)
+        prepared["environment_summary"] = (
+            prepared.get("environment_summary", "")
+            + " A virtual local mailbox is seeded for this case."
+        ).strip()
+        prepared["simulated_payload"] = json.dumps(snapshot, ensure_ascii=False, indent=2)
+        prepared["simulated_operator_task"] = (
+            prepared.get("simulated_operator_task", "")
+            + " Use the virtual mailbox snapshot below as the source of truth."
+        ).strip()
+        prepared["virtual_mail_root"] = str(root)
+    return prepared
 
 
 def run_cases(

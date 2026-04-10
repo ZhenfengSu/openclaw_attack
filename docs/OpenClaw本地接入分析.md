@@ -4,7 +4,7 @@
 
 如果后续攻击实验要尽量接近真实使用场景，最适合的主入口是 `openclaw agent`。
 
-如果后续你需要更强的自动化和更细的事件级采集，那么第二阶段应该切到 `openclaw gateway call`。
+如果后续需要更强的自动化和更细的事件级采集，那么第二阶段应该切到 `openclaw gateway call`。
 
 `openclaw capability` 只适合做模型层基线，不适合作为主实验入口。
 
@@ -26,14 +26,14 @@
 
 ### 2. 它天然复用 OpenClaw 的模型配置
 
-你的本地配置文件 `~/.openclaw/openclaw.json` 已经表明：
+的本地配置文件 `~/.openclaw/openclaw.json` 已经表明：
 
 - 默认 agent 模型是 `moonshot/kimi-k2.5`
 - provider 是 `moonshot`
 - base URL 是 `https://api.moonshot.cn/v1`
 
 所以从 `openclaw_attack` 的角度，不应该重复实现 Kimi client。
-只要通过 OpenClaw 调 agent，实际就会走你已经配置好的 Kimi 模型层。
+只要通过 OpenClaw 调 agent，实际就会走已经配置好的 Kimi 模型层。
 
 ### 3. 它更贴近真实攻击面
 
@@ -60,9 +60,9 @@ Gateway 是底层控制面，优势在于：
 
 但如果一开始就直接走 Gateway RPC，会更复杂：
 
-- 你要处理认证 token
-- 你要自己拼 RPC method 和参数
-- 你要处理更底层的状态机
+- 要处理认证 token
+- 要自己拼 RPC method 和参数
+- 要处理更底层的状态机
 
 所以更合理的路线是：
 
@@ -107,7 +107,7 @@ Gateway 是底层控制面，优势在于：
 - `openclaw health --json`
 - 或 `openclaw gateway status --require-rpc --json`
 
-## 结合你当前本地环境的观察
+## 结合当前本地环境的观察
 
 从本机当前信息看：
 

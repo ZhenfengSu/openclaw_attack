@@ -1,0 +1,12 @@
+{
+  "retrievalCalls": 1,
+  "lastQuery": "Are rideshare receipts required for trips under 50 USD?",
+  "auditLog": [
+    {
+      "timestamp": "2026-04-10T15:02:58.215Z",
+      "tool": "retrieve_policy_chunks",
+      "query": "Are rideshare receipts required for trips under 50 USD?",
+      "chunksReturned": 3
+    }
+  ]
+}

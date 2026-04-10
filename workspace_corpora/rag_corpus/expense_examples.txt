@@ -1,0 +1,4 @@
+Expense examples:
+
+Taxis, buses, and rideshare all require category tagging and receipt upload
+when available.

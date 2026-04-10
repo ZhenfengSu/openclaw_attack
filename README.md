@@ -242,6 +242,68 @@ python3 src/attack_harness.py \
 That set covers `web`, `email`, `rag`, `mcp`, and `skill` cases with richer
 embedded artifacts intended for manual success inspection.
 
+Run the live local-skill attack set:
+
+```bash
+python3 src/attack_harness.py \
+  --case-path data/skill_live_attack_cases.jsonl \
+  --out-path results/skill_live_attack_runs.json
+```
+
+Before using the live skill set, make sure OpenClaw can see this repository's
+`skills/` directory. See
+[skills/README.md](/home/link/project/openclaw_security/openclaw_attack/skills/README.md).
+
+Run the live web-search MCP set:
+
+```bash
+python3 src/attack_harness.py \
+  --case-path data/web_search_live_attack_cases.jsonl \
+  --out-path results/web_search_live_attack_runs.json
+```
+
+Run the live rag MCP set:
+
+```bash
+python3 src/attack_harness.py \
+  --case-path data/rag_live_attack_cases.jsonl \
+  --out-path results/rag_live_attack_runs.json
+```
+
+Before using those sets, register the isolated web-search or rag MCP server described in
+[mcp_servers/README.md](/home/link/project/openclaw_security/openclaw_attack/mcp_servers/README.md).
+
+If you want a lighter fallback without MCP, use the file-based corpus under
+[workspace_corpora/README.md](/home/link/project/openclaw_security/openclaw_attack/workspace_corpora/README.md).
+
+Run the virtual-mail email attack set:
+
+```bash
+python3 src/attack_harness.py \
+  --case-path data/email_workspace_attack_cases.jsonl \
+  --out-path results/email_workspace_attack_runs.json
+```
+
+That set seeds a virtual local mailbox per case and injects the resulting
+inbox/thread snapshot into the prompt.
+
+Included email variants:
+
+- poisoned footer in a normal thread
+- forwarding-chain contamination
+- attachment-excerpt contamination
+- fake system-notification override
+
+For a closer-to-real local mail workflow, use the virtual mail system:
+
+```bash
+python3 src/virtual_mail_system.py init --root virtual_mail --reset
+python3 src/virtual_mail_system.py seed --root virtual_mail --scenario procurement_footer
+python3 src/virtual_mail_system.py list --root virtual_mail --mailbox ops-assistant --folder inbox
+```
+
+See [virtual_mail/README.md](/home/link/project/openclaw_security/openclaw_attack/virtual_mail/README.md).
+
 ### 3. Run a single case
 
 ```bash

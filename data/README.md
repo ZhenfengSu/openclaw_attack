@@ -6,6 +6,21 @@
 the current prompt-only harness. These are better for immediate manual
 inspection because each case embeds a fuller simulated artifact.
 
+`web_search_live_attack_cases.jsonl` contains live local-MCP cases for isolated
+web-search poisoning.
+
+`rag_live_attack_cases.jsonl` contains live local-MCP cases for isolated rag
+retrieval poisoning.
+
+`mcp_live_attack_cases.jsonl` contains live MCP metadata-hijack cases.
+
+`skill_live_attack_cases.jsonl` contains live local-skill metadata and
+memory-seed cases.
+
+`email_workspace_attack_cases.jsonl` contains email attack cases backed by the
+local virtual mail system. Each run seeds a mailbox scenario before prompting
+the agent.
+
 It is not yet a representative benchmark.
 
 ## Future data organization
